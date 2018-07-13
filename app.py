@@ -2,12 +2,12 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET', 'PUT', 'HEAD'])
 def handle_base():
     echo('', request)
     return '', 200
 
-@app.route('/<path:dest_path>', methods=['POST'])
+@app.route('/<path:dest_path>', methods=['POST', 'GET', 'PUT', 'HEAD'])
 def handle_all(dest_path):
     echo(dest_path, request)
     return '', 200
