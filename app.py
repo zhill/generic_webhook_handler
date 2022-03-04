@@ -5,13 +5,26 @@ app = Flask(__name__)
 
 data_buffer = []
 
+@app.route('/', methods=['POST', 'GET'])
+def handle_base():
+    return add_data('/', request), 200
+
+@app.route('/<path:dest_path>', methods=['GET'])
+def handle_non_post(dest_path):
+    return 'ok', 200
 
 @app.route('/<path:dest_path>', methods=['POST'])
 def handle_post_all(dest_path):
+    return add_data(dest_path, request), 200
+
+def add_data(dest_path, request):
     global data_buffer
     echo(dest_path, request)
-    data_buffer.append(json.loads(request.data))
-    return '', 200
+    if request.content_type == 'application/json':
+        data_buffer.append(json.loads(request.data))
+    else:
+        data_buffer.append(str(request.data))
+    return 'ok'
 
 
 @app.route('/dump', methods=['GET'])
